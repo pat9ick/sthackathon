@@ -8,7 +8,7 @@ def db_connect():
         connection = pyodbc.connect(
             'DRIVER={ODBC Driver 17 for SQL Server};'
             'SERVER=database-hackathon.cfn2vvgqdwd8.ap-southeast-2.rds.amazonaws.com,1433;'
-            'DATABASE=Hackathon;'
+            'DATABASE=Hackathon1;'
             'UID=admin;'
             'PWD=Hackathon2023db;'
             'TrustServerCertificate=yes'
@@ -36,18 +36,40 @@ def main():
 
         # Display basic database metrics
         st.header("Database Metrics")
-        # Add your SQL query here to fetch metrics from the database
-        # Example: cursor = connection.cursor()
-        # cursor.execute("SELECT COUNT(*) FROM dbo.Fact_Finhub1")
-        # result = cursor.fetchone()
-        # st.write(f"Number of records in dbo.Fact_Finhub1: {result[0]}")
-        # cursor.close()
 
-        # Display basic system metrics
+        # Example 1: Get the number of records in dbo.Fact_Finhub1
+        cursor = connection.cursor()
+        cursor.execute("SELECT COUNT(*) FROM dbo.Fact_Finhub1")
+        result = cursor.fetchone()
+        st.write(f"Number of records in dbo.Fact_Finhub1: {result[0]}")
+        cursor.close()
+
+        # Example 2: Get the total data volume in dbo.Fact_Finhub1
+        cursor = connection.cursor()
+        cursor.execute("SELECT SUM(DATALENGTH(*)) FROM dbo.Fact_Finhub1")
+        result = cursor.fetchone()
+        total_data_volume = result[0] / (1024 * 1024)  # Convert to megabytes
+        st.write(f"Total data volume in dbo.Fact_Finhub1: {total_data_volume:.2f} MB")
+        cursor.close()
+
+        # Example 3: Get the number of databases (dbo)
+        cursor = connection.cursor()
+        cursor.execute("SELECT COUNT(*) FROM INFORMATION_SCHEMA.SCHEMATA WHERE SCHEMA_NAME LIKE 'dbo'")
+        result = cursor.fetchone()
+        st.write(f"Number of databases (dbo): {result[0]}")
+        cursor.close()
+
+        # Display KPI cards for system metrics
         st.header("System Metrics")
+
+        # Get system metrics
         cpu_usage, memory_usage = get_system_metrics()
-        st.write(f"CPU Usage: {cpu_usage}%")
-        st.write(f"Memory Usage: {memory_usage}%")
+
+        # Display CPU usage as a KPI card
+        st.metric(label="CPU Usage", value=f"{cpu_usage}%", delta=cpu_usage)
+
+        # Display memory usage as a KPI card
+        st.metric(label="Memory Usage", value=f"{memory_usage}%", delta=memory_usage)
 
         # Close the database connection
         connection.close()
