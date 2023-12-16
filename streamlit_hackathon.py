@@ -10,7 +10,7 @@ def db_connect():
             'SERVER=database-hackathon.cfn2vvgqdwd8.ap-southeast-2.rds.amazonaws.com,1433;'
             'DATABASE=Hackathon;'
             'UID=admin;'
-            'PWD=Hackathon2023db;'
+            'PWD=XXXX;'
             'TrustServerCertificate=yes'
         )
         return connection
