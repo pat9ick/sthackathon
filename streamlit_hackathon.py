@@ -1,12 +1,14 @@
 import streamlit as st
 import pyodbc
 import psutil
+import matplotlib.pyplot as plt
+import numpy as np
 
 # Function to connect to the database
 def db_connect():
     try:
         connection = pyodbc.connect(
-            'DRIVER={ODBC Driver 17 for SQL Server};'
+            'DRIVER={ODBC Driver 18 for SQL Server};'
             'SERVER=database-hackathon.cfn2vvgqdwd8.ap-southeast-2.rds.amazonaws.com,1433;'
             'DATABASE=Hackathon;'
             'UID=admin;'
@@ -23,6 +25,30 @@ def get_system_metrics():
     cpu_usage = psutil.cpu_percent()
     memory_usage = psutil.virtual_memory().percent
     return cpu_usage, memory_usage
+
+# Function to create a gauge chart
+def create_gauge(value, max_value, label):
+    angle = value / max_value * 180  # Calculate the angle based on the value
+
+    # Create a gauge plot
+    fig, ax = plt.subplots(figsize=(3, 1.5), subplot_kw=dict(polar=True))
+    ax.set_theta_offset(np.pi / 2)
+    ax.set_theta_direction(-1)
+    ax.set_rlabel_position(0)
+
+    # Plot the gauge background
+    ax.set_yticklabels([])
+    ax.set_ylim(0, 180)
+    ax.plot([0, 0], [0, 180], linewidth=2, color='black')
+
+    # Plot the filled portion of the gauge
+    ax.fill_between([0, np.radians(angle)], 0, 180, color='green', alpha=0.5)
+
+    # Add a label with the current value
+    ax.text(0.5, 0.5, f'{value}/{max_value}\n{label}', transform=ax.transAxes,
+            horizontalalignment='center', verticalalignment='center', fontsize=10)
+
+    return fig
 
 # Streamlit app
 def main():
@@ -45,9 +71,19 @@ def main():
 
         # Display basic system metrics
         st.header("System Metrics")
+
+        # Get system metrics
         cpu_usage, memory_usage = get_system_metrics()
-        st.write(f"CPU Usage: {cpu_usage}%")
-        st.write(f"Memory Usage: {memory_usage}%")
+
+        # Create and display CPU usage gauge
+        st.subheader("CPU Usage")
+        cpu_gauge_fig = create_gauge(cpu_usage, 100, "Percentage")
+        st.pyplot(cpu_gauge_fig)
+
+        # Create and display Memory usage gauge
+        st.subheader("Memory Usage")
+        memory_gauge_fig = create_gauge(memory_usage, 100, "Percentage")
+        st.pyplot(memory_gauge_fig)
 
         # Close the database connection
         connection.close()
