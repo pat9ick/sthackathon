@@ -49,4 +49,29 @@ def main():
         # Example: cursor = connection.cursor()
         # cursor.execute("SELECT COUNT(*) FROM dbo.Fact_Finhub1")
         # result = cursor.fetchone()
-        # st.write(f"Number of records in dbo.Fact_Finhub1: {result[0]}
+        # st.write(f"Number of records in dbo.Fact_Finhub1: {result[0]}")
+        # cursor.close()
+
+        # Display basic system metrics
+        st.header("System Metrics")
+
+        # Get system metrics
+        cpu_usage, memory_usage = get_system_metrics()
+
+        # Create and display CPU usage gauge
+        st.subheader("CPU Usage")
+        st.progress(cpu_usage / 100)
+        st.write(f"CPU Usage: {cpu_usage}%")
+
+        # Create and display Memory usage gauge
+        st.subheader("Memory Usage")
+        st.progress(memory_usage / 100)
+        st.write(f"Memory Usage: {memory_usage}%")
+
+        # Close the database connection
+        connection.close()
+    else:
+        st.error("Failed to connect to the database.")
+
+if __name__ == "__main__":
+    main()
