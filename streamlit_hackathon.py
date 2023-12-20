@@ -8,7 +8,7 @@ import numpy as np
 def db_connect():
     try:
         connection = pyodbc.connect(
-            'DRIVER={ODBC Driver 18 for SQL Server};'
+            'DRIVER={ODBC Driver 17 for SQL Server};'
             'SERVER=database-hackathon.cfn2vvgqdwd8.ap-southeast-2.rds.amazonaws.com,1433;'
             'DATABASE=Hackathon;'
             'UID=admin;'
