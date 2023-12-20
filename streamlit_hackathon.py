@@ -85,6 +85,10 @@ def main():
         memory_gauge_fig = create_gauge(memory_usage, 100, "Percentage")
         st.pyplot(memory_gauge_fig)
 
+        # Display Performance Gauge Chart
+        st.subheader("Performance Gauge Chart")
+        st.pyplot(plt)
+
         # Close the database connection
         connection.close()
     else:
