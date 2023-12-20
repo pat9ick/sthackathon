@@ -6,7 +6,7 @@ import psutil
 def db_connect():
     try:
         connection = pyodbc.connect(
-            'DRIVER={ODBC Driver 18 for SQL Server};'
+            'DRIVER={ODBC Driver 17 for SQL Server};'
             'SERVER=database-hackathon.cfn2vvgqdwd8.ap-southeast-2.rds.amazonaws.com,1433;'
             'DATABASE=Hackathon;'
             'UID=admin;'
@@ -67,6 +67,9 @@ def main():
         st.subheader("Memory Usage")
         st.progress(memory_usage / 100)
         st.write(f"Memory Usage: {memory_usage}%")
+
+        # Display Performance Gauge Chart
+        # performance_gauge_chart(75)  # Replace 75 with your actual performance percentage
 
         # Close the database connection
         connection.close()
