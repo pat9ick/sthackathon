@@ -1,6 +1,5 @@
 streamlit==1.15.0
 pyodbc==5.0.1
 psutil==5.9.6
-matplotlib==3.3.4
 numpy==1.20.1
 
