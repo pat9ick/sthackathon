@@ -3,9 +3,6 @@ import pyodbc
 import psutil
 import pandas as pd
 
-# Set the theme to light
-st.set_theme("light")
-
 # Function to connect to the database
 def db_connect():
     try:
