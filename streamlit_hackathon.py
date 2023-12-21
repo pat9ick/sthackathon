@@ -1,6 +1,7 @@
 import streamlit as st
 import pyodbc
 import psutil
+import pandas as pd
 
 # Function to connect to the database
 def db_connect():
@@ -16,6 +17,15 @@ def db_connect():
         return connection
     except Exception as e:
         st.error(f"Error connecting to the database: {e}")
+        return None
+
+# Function to execute SQL query and return results as a DataFrame
+def execute_sql_query(connection, sql_query):
+    try:
+        result = pd.read_sql_query(sql_query, connection)
+        return result
+    except Exception as e:
+        st.error(f"Error executing SQL query: {e}")
         return None
 
 # Function to get basic monitoring metrics
@@ -62,6 +72,31 @@ def main():
     if connection:
         st.success("Connected to the database.")
 
+        # Execute SQL query
+        sql_query = """
+        SELECT TOP 10
+            r.creation_time,
+            s.text AS [SQL Text],
+            r.total_elapsed_time / 1000.0 AS [Total Elapsed Time (s)],
+            r.total_worker_time / 1000.0 AS [Total Worker Time (s)],
+            r.execution_count,
+            r.plan_handle
+        FROM
+            sys.dm_exec_query_stats r
+        CROSS APPLY
+            sys.dm_exec_sql_text(r.sql_handle) s
+        ORDER BY
+            r.creation_time DESC;
+        """
+        results = execute_sql_query(connection, sql_query)
+
+        # Display SQL query results in a table
+        if results is not None:
+            st.header("SQL Query Results")
+            st.dataframe(results)
+        else:
+            st.warning("No results to display.")
+
         # Display connection string
         st.header("Connection String")
         st.markdown(
@@ -72,7 +107,7 @@ def main():
             SERVER=database-hackathon.cfn2vvgqdwd8.ap-southeast-2.rds.amazonaws.com,1433;
             DATABASE=Hackathon;
             UID=admin;
-            PWD=*****;
+            PWD=Hackathon2023db;
             TrustServerCertificate=yes
             ```
             '''
