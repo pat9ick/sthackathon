@@ -45,7 +45,7 @@ def performance_gauge_chart(percentage):
 
 # Streamlit app
 def main():
-    st.title("OpenDI Hackathon Mini Data Cloud")
+    st.title(" :cd: OpenDI Hackathon Mini Data Cloud")
 
     # Display basic system metrics
     st.header("System Metrics")
