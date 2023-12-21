@@ -45,7 +45,7 @@ def performance_gauge_chart(percentage):
 
 # Streamlit app
 def main():
-    st.title("OpenDI Hackathon Mini Data Cloud")
+    st.title(" :cd: OpenDI Hackathon Mini Data Cloud")
 
     # Display basic system metrics
     st.header("System Metrics")
@@ -54,12 +54,12 @@ def main():
     cpu_usage, memory_usage = get_system_metrics()
 
     # Create and display CPU usage gauge
-    st.subheader(":cd:CPU Usage")
+    st.subheader("CPU Usage")
     st.progress(cpu_usage / 100)
     st.write(f"CPU Usage: {cpu_usage}%")
 
     # Create and display Memory usage gauge
-    st.subheader(":floppy_disk:Memory Usage")
+    st.subheader("Memory Usage")
     st.progress(memory_usage / 100)
     st.write(f"Memory Usage: {memory_usage}%")
 
@@ -96,7 +96,7 @@ def main():
 
         # Display SQL query results in a table
         if results is not None:
-            st.header("SQL Query Results")
+            st.header("Wait Stats")
             st.dataframe(results)
         else:
             st.warning("No results to display.")
@@ -104,7 +104,7 @@ def main():
         # Close the database connection
 
         # Display connection string
-        st.header(":bookmark_tabs:Connection String")
+        st.header("Connection String")
         st.markdown(
             '''
             The connection string to the database is:
