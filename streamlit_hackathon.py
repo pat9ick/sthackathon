@@ -97,6 +97,8 @@ def main():
         else:
             st.warning("No results to display.")
 
+        # Close the database connection
+
         # Display connection string
         st.header("Connection String")
         st.markdown(
@@ -107,13 +109,12 @@ def main():
             SERVER=database-hackathon.cfn2vvgqdwd8.ap-southeast-2.rds.amazonaws.com,1433;
             DATABASE=Hackathon;
             UID=admin;
-            PWD=Hackathon2023db;
+            PWD=************;
             TrustServerCertificate=yes
             ```
             '''
         )
 
-        # Close the database connection
         connection.close()
     else:
         st.error("Failed to connect to the database.")
