@@ -43,6 +43,17 @@ def performance_gauge_chart(percentage):
     # Display the percentage value
     st.write(f"Performance: {percentage}%")
 
+def create_costdata():
+    # Data
+    data = {
+        'category': ['AWS cloud db', 'AWS instance EC2', 'streamlit cloud host', 'websocket Finntech'],
+        'cost': ['free', 'free', 'free', 'free']
+    }
+
+    # Create DataFrame
+    costdata = pd.DataFrame(data)
+    return costdata
+
 # Streamlit app
 def main():
     st.title("OpenDI Hackathon Mini Data Cloud")
@@ -54,12 +65,12 @@ def main():
     cpu_usage, memory_usage = get_system_metrics()
 
     # Create and display CPU usage gauge
-    st.subheader(":cd:CPU Usage")
+    st.subheader(" :cd: CPU Usage")
     st.progress(cpu_usage / 100)
     st.write(f"CPU Usage: {cpu_usage}%")
 
     # Create and display Memory usage gauge
-    st.subheader(":floppy_disk:Memory Usage")
+    st.subheader(" :floppy_disk: Memory Usage")
     st.progress(memory_usage / 100)
     st.write(f"Memory Usage: {memory_usage}%")
 
@@ -96,15 +107,22 @@ def main():
 
         # Display SQL query results in a table
         if results is not None:
-            st.header("Wait Stats")
+            st.header(" :stopwatch: Wait Stats")
             st.dataframe(results)
         else:
             st.warning("No results to display.")
 
         # Close the database connection
+            
+            # Create costdata DataFrame
+        costdata = create_costdata()
+
+        # Display costdata DataFrame
+        st.header(" :moneybag: Cost")
+        st.table(costdata)
 
         # Display connection string
-        st.header(":bookmark_tabs:Connection String")
+        st.header(" :bookmark_tabs: Connection String")
         st.markdown(
             '''
             The connection string to the database is:
