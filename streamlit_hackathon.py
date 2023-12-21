@@ -6,7 +6,7 @@ import psutil
 def db_connect():
     try:
         connection = pyodbc.connect(
-            'DRIVER={ODBC Driver 17 for SQL Server};'
+            'DRIVER={ODBC Driver 18 for SQL Server};'
             'SERVER=database-hackathon.cfn2vvgqdwd8.ap-southeast-2.rds.amazonaws.com,1433;'
             'DATABASE=Hackathon;'
             'UID=admin;'
@@ -35,7 +35,26 @@ def performance_gauge_chart(percentage):
 
 # Streamlit app
 def main():
-    st.title("Database Backend Monitoring App")
+    st.title("OpenDI Hackathon Mini Data Cloud")
+
+    # Display basic system metrics
+    st.header("System Metrics")
+
+    # Get system metrics
+    cpu_usage, memory_usage = get_system_metrics()
+
+    # Create and display CPU usage gauge
+    st.subheader("CPU Usage")
+    st.progress(cpu_usage / 100)
+    st.write(f"CPU Usage: {cpu_usage}%")
+
+    # Create and display Memory usage gauge
+    st.subheader("Memory Usage")
+    st.progress(memory_usage / 100)
+    st.write(f"Memory Usage: {memory_usage}%")
+
+    # Display Performance Gauge Chart
+    # performance_gauge_chart(75)  # Replace 75 with your actual performance percentage
 
     # Connect to the database
     connection = db_connect()
@@ -43,33 +62,21 @@ def main():
     if connection:
         st.success("Connected to the database.")
 
-        # Display basic database metrics
-        st.header("Database Metrics")
-        # Add your SQL query here to fetch metrics from the database
-        # Example: cursor = connection.cursor()
-        # cursor.execute("SELECT COUNT(*) FROM dbo.Fact_Finhub1")
-        # result = cursor.fetchone()
-        # st.write(f"Number of records in dbo.Fact_Finhub1: {result[0]}")
-        # cursor.close()
-
-        # Display basic system metrics
-        st.header("System Metrics")
-
-        # Get system metrics
-        cpu_usage, memory_usage = get_system_metrics()
-
-        # Create and display CPU usage gauge
-        st.subheader("CPU Usage")
-        st.progress(cpu_usage / 100)
-        st.write(f"CPU Usage: {cpu_usage}%")
-
-        # Create and display Memory usage gauge
-        st.subheader("Memory Usage")
-        st.progress(memory_usage / 100)
-        st.write(f"Memory Usage: {memory_usage}%")
-
-        # Display Performance Gauge Chart
-        # performance_gauge_chart(75)  # Replace 75 with your actual performance percentage
+        # Display connection string
+        st.header("Connection String")
+        st.markdown(
+            '''
+            The connection string to the database is:
+            ```
+            DRIVER={ODBC Driver 18 for SQL Server};
+            SERVER=database-hackathon.cfn2vvgqdwd8.ap-southeast-2.rds.amazonaws.com,1433;
+            DATABASE=Hackathon;
+            UID=admin;
+            PWD=*****;
+            TrustServerCertificate=yes
+            ```
+            '''
+        )
 
         # Close the database connection
         connection.close()
