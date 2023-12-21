@@ -74,19 +74,23 @@ def main():
 
         # Execute SQL query
         sql_query = """
-        SELECT TOP 10
-            r.creation_time,
-            s.text AS [SQL Text],
-            r.total_elapsed_time / 1000.0 AS [Total Elapsed Time (s)],
-            r.total_worker_time / 1000.0 AS [Total Worker Time (s)],
-            r.execution_count,
-            r.plan_handle
-        FROM
-            sys.dm_exec_query_stats r
-        CROSS APPLY
-            sys.dm_exec_sql_text(r.sql_handle) s
-        ORDER BY
-            r.creation_time DESC;
+        DECLARE @StartTime DATETIME = GETDATE();
+
+        SELECT 
+            wait_type,
+            waiting_tasks_count AS 'Waiting Tasks Count',
+            wait_time_ms AS 'Total Wait Time (ms)',
+            max_wait_time_ms AS 'Max Wait Time (ms)'
+        FROM 
+            sys.dm_os_wait_stats
+        WHERE 
+            waiting_tasks_count > 0
+        ORDER BY 
+            waiting_tasks_count DESC;
+
+        PRINT 'Time Elapsed: ' + CONVERT(VARCHAR, DATEDIFF(MILLISECOND, @StartTime, GETDATE())) + ' ms';
+        PRINT '';
+
         """
         results = execute_sql_query(connection, sql_query)
 
