@@ -151,7 +151,57 @@ Example results as below:
 
 ### Deployment & Run
 
+AWS instance setting - EC2 (free tier)
 
+**AWS CLI to create the instance**
 
+```bash
+aws configure
 
+aws ec2 run-instances \
+  --image-id ami-xxxxxxxxxxxxxxxxx \  # Replace with your AMI ID
+  --instance-type t2.micro \
+  --key-name YourKeyName \
+  --security-groups YourSecurityGroup \
+  --count 1
+```
 
+**Connect to the EC2 Instance:**
+
+```bash
+ssh -i YourKeyPair.pem ec2-user@your-instance-ip
+```
+
+Install SQL Server
+
+```bash
+sudo yum install -y mssql-tools
+```
+
+Connect to the db
+
+```bash
+sqlcmd -S your-rds-endpoint -U your-username -P your-password
+```
+
+Create the table (the example one)
+
+```sql
+CREATE TABLE [dbo].[Fact_Finhub1] (
+    [type] NVARCHAR (50) NULL,
+    [symbol] NVARCHAR (50) NULL,
+    [price] FLOAT (53) NULL,
+    [volume] FLOAT (53) NULL,
+    [timestamp] BIGINT NULL
+);
+```
+
+Once deployed, use below code via SSH to run the real-time data processing (below screenshot means the data application is running successfully)
+
+```powershell
+cd <path you keep the pem file (in github)>
+
+ssh -i finhubaws.pem ubuntu@ec2-3-25-239-201.ap-southeast-2.compute.amazonaws.com
+```
+
+![image-20231221143125726](https://github.com/pat9ick/sthackathon/blob/b9dd1243fdb457c20f12b95d67e2c5e8c136eee5/screenshot_ssh.png?raw=true)
