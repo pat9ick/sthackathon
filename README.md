@@ -2,15 +2,19 @@
 
 Project description: implementation of mini data cloud with **minimum code and cost**.
 
-Team **PRC**
+Team Name: PRC
 
 Members: @Riku, @Crazyrat, @Pat
 
 Infra & language: AWS & Python/SQL
 
+- [x] Part A WebSocket &ETL : A WebSocket source as an example, including a simple ETL processing the source data and load into the target database on AWS
+- [x] Part B Frontend Dashboard based on open-source tool named Streamlit, including its native & free cloud hosting : [Streamlit (sthackathon-5swxdhgjb3brcvkutxi234.streamlit.app)](https://sthackathon-5swxdhgjb3brcvkutxi234.streamlit.app/) 
+- [x] Part C Deployment: aws instance EC2 micro setup, aws database setup, SSH to connect to the instance
 
 
-### WebSocket & ETL 
+
+### Part A WebSocket & ETL 
 
 Uses `websocket`,`json`,`pandas`,`pyodbc` python libraries as ETL tool
 
@@ -142,3 +146,12 @@ results = execute_sql_query(connection, sql_query)
 Example results as below:
 
 ![image-20231221143125725](https://github.com/pat9ick/sthackathon/blob/main/screenshot_waitstats.png?raw=true)
+
+
+
+### Deployment & Run
+
+
+
+
+
